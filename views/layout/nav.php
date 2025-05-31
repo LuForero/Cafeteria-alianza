@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">Inicio</a>
+        <a class="navbar-brand" href="index.php?controller=home&action=index#">Inicio</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuNavbar">
             <span class="navbar-toggler-icon"></span>
         </button>

@@ -26,4 +26,22 @@ class Product // clase producto
         $stmt = $this->db->prepare("INSERT INTO products (name, reference, price, weight, category_id, stock) VALUES (?, ?, ?, ?, ?, ?)"); //parametros que se reciben en la dase de datos (?) va a cada campo de ref
         return $stmt->execute([$name, $reference, $price, $weight, $category_id, $stock]);
     }
+
+    public function find($id)
+    {
+        $stmt = $this->db->prepare("SELECT * FROM products WHERE id = ?");
+        $stmt->execute([$id]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+    //Método find(): Busca un usuario por su ID.
+    public function update($id, $name, $reference, $price, $weight, $category_id, $stock)
+    {
+        $stmt = $this->db->prepare("UPDATE products SET name = ?, reference = ?, price = ?, weight = ?, category_id = ?, stock = ? WHERE id = ?");
+        return $stmt->execute([$name, $reference, $price, $weight, $category_id, $stock, $id]);
+    }
+    public function getCategories()
+    {
+        $stmt = $this->db->query("SELECT id, name FROM categories ORDER BY name ASC");
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }

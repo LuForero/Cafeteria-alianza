@@ -80,4 +80,68 @@ class ProductController
             exit;
         }
     }
+
+    // Método edit(): Muestra el formulario para editar un producto existente.
+    public function edit($id)
+    {
+        session_start();
+
+        if (!isset($_SESSION['user_id'])) {
+            header("Location: index.php?controller=auth&action=login");
+            exit;
+        }
+
+        $productModel = new Product(); // Instancia del modelo Product
+        $product = $productModel->find($id); // Busca el producto por su ID
+
+        if (!$product) {
+            die("Producto no encontrado.");
+        }
+
+        $categories = $productModel->getCategories(); // Obtiene todas las categorías
+
+        include __DIR__ . '/../views/products/edit.php'; // Carga la vista de edición
+    }
+
+    // Procesa la actualización del producto
+    public function update($id)
+    {
+        session_start();
+
+        if (!isset($_SESSION['user_id'])) {
+            header("Location: index.php?controller=auth&action=login");
+            exit;
+        }
+
+        $errors = [];
+
+        $name = $_POST['name'] ?? '';
+        $reference = $_POST['reference'] ?? '';
+        $price = $_POST['price'] ?? '';
+        $weight = $_POST['weight'] ?? '';
+        $category_id = $_POST['category_id'] ?? '';
+        $stock = $_POST['stock'] ?? '';
+
+        // Validaciones
+        if (empty($name)) $errors[] = "El nombre es obligatorio.";
+        if (empty($reference)) $errors[] = "La referencia es obligatoria.";
+        if (!is_numeric($price)) $errors[] = "El precio debe ser numérico.";
+        if (!is_numeric($weight)) $errors[] = "El peso debe ser numérico.";
+        if (!is_numeric($category_id)) $errors[] = "Seleccione una categoría válida.";
+        if (!is_numeric($stock)) $errors[] = "El stock debe ser un número.";
+
+        $productModel = new Product(); // ✅ Instanciar modelo antes de usarlo
+        $categories = $productModel->getCategories(); // ✅ Obtener categorías después de instanciar
+
+        if (!empty($errors)) {
+            $product = compact('id', 'name', 'reference', 'price', 'weight', 'category_id', 'stock');
+            include __DIR__ . '/../views/products/edit.php';
+            return;
+        }
+
+        $productModel->update($id, $name, $reference, $price, $weight, $category_id, $stock);
+
+        header("Location: index.php?controller=product&action=index&updated=true");
+        exit;
+    }
 }
