@@ -15,11 +15,12 @@
                         <a class="nav-link" href="index.php?controller=product&action=index">Productos</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="index.php?controller=category&action=index">Categorías</a>
+                        <a class="nav-link" href="index.php?controller=category&action=index">Categoría</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="index.php?controller=auth&action=logout">Cerrar sesion</a>
                     </li>
+
                     <!-- Agrega más enlaces según tus controladores -->
                 </ul>
             <?php endif; ?>

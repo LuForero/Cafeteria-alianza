@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../models/Category.php'; // Requiere el modelo producto para interactuar con la base de datos.
+require_once __DIR__ . '/../models/Category.php'; // Requiere el modelo categoria para interactuar con la base de datos.
 
 class CategoryController
 {
@@ -52,5 +52,71 @@ class CategoryController
             header("Location: index.php?controller=category&action=index&success=1"); // Redirige a la lista de usuarios con un mensaje de éxito.
             exit;
         }
+    }
+    // Método edit(): Muestra el formulario para editar una categoría existente.
+    public function edit($id)
+    {
+        session_start();
+
+        if (!isset($_SESSION['user_id'])) {
+            header("Location: index.php?controller=auth&action=login");
+            exit;
+        }
+
+        $categoryModel = new Category();
+        $category = $categoryModel->find($id); // Busca la categoría por su ID
+
+        if (!$category) {
+            die("Categoría no encontrada.");
+        }
+
+        include __DIR__ . '/../views/categories/edit.php'; // Carga la vista de edición
+    }
+
+    // Procesa la actualización de la categoría
+    public function update($id)
+    {
+        session_start();
+
+        if (!isset($_SESSION['user_id'])) {
+            header("Location: index.php?controller=auth&action=login");
+            exit;
+        }
+
+        $name = $_POST['name'] ?? '';
+        $description = $_POST['description'] ?? '';
+
+        $errors = [];
+        if (empty($name)) $errors[] = "El nombre es obligatorio.";
+
+        if (!empty($errors)) {
+            $categoryModel = new Category();
+            $category = ['id' => $id, 'name' => $name, 'description' => $description];
+            include __DIR__ . '/../views/categories/edit.php';
+            return;
+        }
+
+        $categoryModel = new Category();
+        $categoryModel->update($id, $name, $description);
+
+        header("Location: index.php?controller=category&action=index&updated=true");
+        exit;
+    }
+
+    // Procesa la eliminación de la categoría
+    public function delete($id)
+    {
+        session_start();
+
+        if (!isset($_SESSION['user_id'])) {
+            header("Location: index.php?controller=auth&action=login");
+            exit;
+        }
+
+        $categoryModel = new Category();
+        $categoryModel->delete($id);
+
+        header("Location: index.php?controller=category&action=index&deleted=true");
+        exit;
     }
 }
