@@ -12,28 +12,28 @@ class Sale
 
     public function createSale($product_id, $quantity)
     {
-        try {
-            $stmt = $this->db->prepare("SELECT stock FROM products WHERE id = ?");
-            $stmt->execute([$product_id]);
-            $stock = $stmt->fetchColumn();
+        $stmt = $this->db->prepare("SELECT stock FROM products WHERE id = ?");
+        $stmt->execute([$product_id]);
+        $product = $stmt->fetch();
 
-            if ($stock === false) return "Producto no encontrado.";
-            if ($stock < $quantity) return "No hay suficiente stock disponible.";
-
-            $this->db->beginTransaction();
-
-            $stmt = $this->db->prepare("INSERT INTO sales (product_id, quantity, sale_date) VALUES (?, ?, NOW())");
-            $stmt->execute([$product_id, $quantity]);
-
-            $stmt = $this->db->prepare("UPDATE products SET stock = stock - ? WHERE id = ?");
-            $stmt->execute([$quantity, $product_id]);
-
-            $this->db->commit();
-            return true;
-        } catch (Exception $e) {
-            $this->db->rollBack();
-            return "Error al registrar la venta.";
+        if (!$product) {
+            return "Producto no encontrado.";
         }
+
+        if ($product['stock'] < $quantity) {
+            return "No hay suficiente stock disponible.";
+        }
+
+        // Resta el stock
+        $newStock = $product['stock'] - $quantity;
+        $stmt = $this->db->prepare("UPDATE products SET stock = ? WHERE id = ?");
+        $stmt->execute([$newStock, $product_id]);
+
+        // Registra la venta
+        $stmt = $this->db->prepare("INSERT INTO sales (product_id, quantity, sale_date) VALUES (?, ?, NOW())");
+        $stmt->execute([$product_id, $quantity]);
+
+        return true;
     }
 
     public function getAll()

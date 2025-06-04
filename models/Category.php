@@ -5,23 +5,44 @@ class Category
 {
     private $db;
 
-    public function __construct() //Este es el constructor de la clase.
+    public function __construct()
     {
-        $this->db = Database::connect(); //Inicializa la propiedad $db con una conexión a la base de datos utilizando el método estático connect de la clase Database.
+        $this->db = Database::connect();
     }
 
-    //Método getAll(): Devuelve todos los usuarios.
+    // Obtener todas las categorías
     public function getAll()
     {
-        $stmt = $this->db->query("SELECT id, name, description FROM categories"); //Ejecuta la consulta SQL y devuelve todos los resultados como un array asociativo.
-        return $stmt->fetchAll(PDO::FETCH_ASSOC); //Devuelve todos los resultados como un array asociativo.
+        $stmt = $this->db->query("SELECT id, name, description FROM categories");
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    //Método create(): Crea una nueva categoría en la base de datos.
+    // Crear nueva categoría
     public function create($name, $description)
     {
-        $stmt = $this->db->prepare("INSERT INTO categories (name, description) VALUES (?, ?)"); //Prepara una consulta SQL para insertar un nuevo usuario en la base de datos.
-        return $stmt->execute([$name, $description]); //Ejecuta la consulta SQL con los parámetros proporcionados.
+        $stmt = $this->db->prepare("INSERT INTO categories (name, description) VALUES (?, ?)");
+        return $stmt->execute([$name, $description]);
     }
 
+    // Buscar una categoría por ID
+    public function find($id)
+    {
+        $stmt = $this->db->prepare("SELECT * FROM categories WHERE id = ?");
+        $stmt->execute([$id]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    // Actualizar una categoría
+    public function update($id, $name, $description)
+    {
+        $stmt = $this->db->prepare("UPDATE categories SET name = ?, description = ? WHERE id = ?");
+        return $stmt->execute([$name, $description, $id]);
+    }
+
+    // Eliminar una categoría
+    public function delete($id)
+    {
+        $stmt = $this->db->prepare("DELETE FROM categories WHERE id = ?");
+        return $stmt->execute([$id]);
+    }
 }

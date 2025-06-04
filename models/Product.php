@@ -44,4 +44,9 @@ class Product // clase producto
         $stmt = $this->db->query("SELECT id, name FROM categories ORDER BY name ASC");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+    public function increaseStock($product_id, $quantity)
+    {
+        $stmt = $this->db->prepare("UPDATE products SET stock = stock + ? WHERE id = ?");
+        return $stmt->execute([$quantity, $product_id]);
+    }
 }

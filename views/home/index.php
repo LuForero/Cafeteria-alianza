@@ -22,7 +22,7 @@
     ">
         <h1 class="display-3 fw-bold">Bienvenido a Cafetería Alianza</h1>
         <p class="lead mt-3">Disfruta del mejor café y un ambiente acogedor</p>
-        <a class="link-dark link-opacity-75-hover btn btn-lg mt-4 text-white" style="background-color: rgba(231, 137, 14, 0.94); box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4)" href="index.php?controller=category&action=index">Ir a Categorías</a>
+        <a class="link-dark link-opacity-75-hover btn btn-lg mt-4 text-white" style="background-color: rgba(231, 137, 14, 0.94); box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4)" href="index.php?controller=product&action=index">Ir a Productos</a>
     </div>
 
 </section>

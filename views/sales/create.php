@@ -4,9 +4,10 @@
 <div class="container mt-4">
     <h2>Registrar Venta</h2>
 
-    <?php if (!empty($error)): ?>
-        <div class="alert alert-danger"><?= $error ?></div>
+    <?php if (isset($error)): ?>
+        <div class="alert alert-danger"><?= htmlspecialchars($error) ?></div>
     <?php endif; ?>
+
 
     <form action="index.php?controller=sale&action=store" method="POST">
         <div class="mb-3">

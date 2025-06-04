@@ -1,11 +1,14 @@
 <?php require_once __DIR__ . '/../layout/header.php'; ?>
 <?php require_once __DIR__ . '/../layout/nav.php'; ?>
 <h2>Listado de Productos</h2>
-<a href="index.php?controller=product&action=create" class="link-light link-opacity-60-hover btn btn-success mb-2 text-white" style="box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.36)">Nuevo Producto</a>
+<?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
+    <a href="index.php?controller=product&action=create" class="link-light link-opacity-60-hover btn btn-success mb-2 text-white" style="box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.36)">Nuevo Producto</a>
+<?php endif; ?>
+
 <a href="index.php?controller=sale&action=index" class="link-light link-opacity-60-hover btn btn-info mb-2 text-white" style="box-shadow: 1px 2px 4px rgba(0,0,0,0.36)">
     <i class="bi bi-clock-history"></i>Historial de ventas</a>
 
-<?php if (isset($_GET['success'])): ?><!-- Si se ha registrado un nuevo usuario, se muestra un mensaje de éxito -->
+<?php if (isset($_GET['success'])): ?><!-- Si se ha registrado un nuevo producto, se muestra un mensaje de éxito -->
     <div class="alert alert-success">Producto registrado correctamente.</div>
 <?php elseif (isset($_GET['updated'])): ?>
     <div class="alert alert-success">Producto actualizado.</div>
@@ -37,10 +40,12 @@
                     <td><?= date('Y-m-d', strtotime(($product['created_at']))) ?></td>
                     <td>
 
-                        <a href="index.php?controller=product&action=edit&id=<?= $product['id'] ?>" class="link-dark link-opacity-60-hover btn btn-warning btn-sm text-white" style="box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.36)">Editar</a>
-                        <a href="index.php?controller=product&action=delete&id=<?= $product['id'] ?>" class="link-dark link-opacity-60-hover btn btn-danger btn-sm text-white" style="box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.36)"
-                            onclick="return confirm('¿Estás seguro de eliminar este usuario?')">Eliminar</a>
-                        <a href="index.php?controller=sale&action=create&id=1<?= $product['id'] ?>" class="link-dark link-opacity-60-hover btn btn-primary btn-sm text-white" style="box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.36)">Registrar Venta</a>
+                        <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
+                            <a href="index.php?controller=product&action=edit&id=<?= $product['id'] ?>" class="link-dark link-opacity-60-hover btn btn-warning btn-sm text-white" style="box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.36)">Editar</a>
+                            <a href="index.php?controller=product&action=delete&id=<?= $product['id'] ?>" class="link-dark link-opacity-60-hover btn btn-danger btn-sm text-white" style="box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.36)"
+                                onclick="return confirm('¿Estás seguro de eliminar este usuario?')">Eliminar</a>
+                        <?php endif; ?>
+                        <a href="index.php?controller=sale&action=create&id=<?= $product['id'] ?>" class="link-dark link-opacity-60-hover btn btn-primary btn-sm text-white" style="box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.36)">Registrar Venta</a>
                     </td>
                 </tr>
 

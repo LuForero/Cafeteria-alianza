@@ -8,28 +8,34 @@
         <div class="collapse navbar-collapse" id="menuNavbar">
             <?php if (isset($_SESSION['user_id'])): ?>
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.php?controller=user&action=index">Usuarios</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.php?controller=product&action=index">Productos</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.php?controller=category&action=index">Categoría</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.php?controller=auth&action=logout">Cerrar sesion</a>
-                    </li>
+                    <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
+                        <li class="nav-item">
+                            <a class="nav-link" href="index.php?controller=user&action=index">Usuarios</a>
+                        </li>
+                    <?php endif; ?>
 
-                    <!-- Agrega más enlaces según tus controladores -->
+                    <?php if (isset($_SESSION['user_role']) && in_array($_SESSION['user_role'], ['admin', 'seller'])): ?>
+                        <li class="nav-item">
+                            <a class="nav-link" href="index.php?controller=product&action=index">Productos</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="index.php?controller=category&action=index">Categoría</a>
+                        </li>
+                    <?php endif; ?>
                 </ul>
             <?php endif; ?>
 
-            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">,
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                 <?php if (isset($_SESSION['user_id'])): ?>
+                    <?php
+                        $roleName = 'Usuario';
+                        if (isset($_SESSION['user_role'])) {
+                            $roleName = ($_SESSION['user_role'] === 'admin') ? 'Administrador' : 'Vendedor';
+                        }
+                    ?>
                     <li class="nav-item">
                         <span class="navbar-text me-2 text-white">
-                            Bienvenido, <?= htmlspecialchars($_SESSION['user_name']) ?>
+                            Bienvenido <?= $roleName ?>, <?= htmlspecialchars($_SESSION['user_name']) ?>
                         </span>
                     </li>
                     <li class="nav-item">

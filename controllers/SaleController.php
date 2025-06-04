@@ -39,8 +39,9 @@ class SaleController
 
             if ($result === true) {
                 header("Location: index.php?controller=sale&action=index");
+                exit;
             } else {
-                $error = $result;
+                $error = $result; // <- este mensaje puede ser de stock insuficiente u otro
                 $productModel = new Product();
                 $products = $productModel->getAll();
                 include __DIR__ . '/../views/sales/create.php';

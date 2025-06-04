@@ -32,6 +32,7 @@ class AuthController // Controlador para manejar las operaciones de autenticaci�
             session_start(); // Inicia la sesión para poder almacenar datos del usuario autenticado.
             $_SESSION['user_id'] = $user['id']; // Almacena el ID del usuario en la sesión.
             $_SESSION['user_name'] = $user['name']; // Almacena el nombre del usuario en la sesión.
+            $_SESSION['user_role'] = $user['role']; // admin o seller
             
             header("Location: index.php?controller=home&action=index"); // Redirige al usuario a la página de inicio después de un inicio de sesión exitoso.
         } else { // Si no se encuentra un usuario o la contraseña no coincide
